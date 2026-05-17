@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shae Creates — Web Artist &amp; Digital Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES
+    ============================================================ */
+    :root {
+      --cream: #f5f0ea;
+      --white: #ffffff;
+      --burgundy: #6b1a28;
+      --burgundy-light: #8c2436;
+      --burgundy-pale: #f0e8eb;
+      --ink: #1a1410;
+      --muted: #7a7068;
+      --gold: #b8936a;
+      --border: #e8e0d8;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-ui: 'DM Mono', 'Courier New', monospace;
+      --font-body: 'Lora', Georgia, serif;
+      --font-bold: 'Syne', sans-serif;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      cursor: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ============================================================
+       CUSTOM CURSOR
+    ============================================================ */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--burgundy);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+      will-change: left, top;
+    }
+
+    .cursor-ring {
+      width: 34px;
+      height: 34px;
+      border: 1.5px solid var(--burgundy);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      opacity: 0.45;
+      transition: width 0.18s ease, height 0.18s ease, opacity 0.18s ease;
+      will-change: left, top;
+    }
+
+    .cursor-dot.is-hovering {
+      width: 16px;
+      height: 16px;
+    }
+
+    .cursor-ring.is-hovering {
+      width: 48px;
+      height: 48px;
+      opacity: 0.25;
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       KEYFRAMES
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes marqueeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      height: 64px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 56px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 30px;
+      color: var(--burgundy);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+    }
+
+    .nav-links a {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--burgundy);
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn-primary {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--burgundy);
+      border: 1.5px solid var(--burgundy);
+      padding: 16px 40px;
+      transition: color 0.35s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-101%);
+      transition: transform 0.4s cubic-bezier(0.77, 0, 0.18, 1);
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border: 1.5px solid var(--border);
+      padding: 16px 40px;
+      transition: border-color 0.25s ease, color 0.25s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--burgundy);
+      color: var(--burgundy);
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      padding-top: 64px;
+    }
+
+    .hero-left {
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 80px 80px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.15s;
+    }
+
+    .hero-name {
+      line-height: 0.92;
+      margin-bottom: 36px;
+    }
+
+    .hero-name-shae {
+      display: block;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 96px;
+      color: var(--burgundy);
+      letter-spacing: -0.025em;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .hero-name-creates {
+      display: block;
+      font-family: var(--font-bold);
+      font-weight: 800;
+      font-size: 88px;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--ink);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.46s;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 400px;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.62s;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.78s;
+    }
+
+    .hero-right {
+      width: 45%;
+      background: #ede7df;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .hero-svg-wrap {
+      width: 72%;
+      max-width: 460px;
+      opacity: 0;
+      animation: fadeIn 1.4s ease forwards;
+      animation-delay: 0.9s;
+    }
+
+    /* ============================================================
+       STATS BAR
+    ============================================================ */
+    #stats {
+      background: var(--burgundy);
+      padding: 60px 80px;
+    }
+
+    .stats-grid {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .stat-item {
+      flex: 1;
+      text-align: center;
+      padding: 8px 32px;
+      position: relative;
+    }
+
+    .stat-item + .stat-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8%;
+      height: 84%;
+      width: 1px;
+      background: rgba(255,255,255,0.18);
+    }
+
+    .stat-number {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 54px;
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ============================================================
+       WORK / PROJECTS
+    ============================================================ */
+    #work {
+      padding: 128px 80px;
+      background: var(--cream);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .section-heading {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 72px;
+      color: var(--ink);
+      letter-spacing: -0.025em;
+      line-height: 0.95;
+      margin-bottom: 80px;
+    }
+
+    .projects {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Project Card */
+    .project-card {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 4px 28px rgba(26,20,16,0.07), 0 1px 4px rgba(26,20,16,0.04);
+      border-left: 2px solid var(--burgundy);
+      display: flex;
+      min-height: 440px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 56px rgba(26,20,16,0.12), 0 4px 12px rgba(26,20,16,0.07);
+    }
+
+    .project-card.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .project-visual {
+      width: 44%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-visual svg {
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+    }
+
+    .project-content {
+      flex: 1;
+      padding: 60px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .project-number {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .project-name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 44px;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .project-desc {
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 32px;
+      max-width: 380px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .tag {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      border: 1px solid var(--burgundy);
+      background: var(--cream);
+      padding: 5px 14px;
+      border-radius: 100px;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      transition: gap 0.25s ease;
+    }
+
+    .project-link:hover {
+      gap: 20px;
+    }
+
+    .project-link::after {
+      content: '→';
+      font-size: 14px;
+    }
+
+    /* ============================================================
+       DESIGN PHILOSOPHY
+    ============================================================ */
+    #philosophy {
+      background: var(--cream);
+      padding: 128px 80px;
+      border-top: 1px solid var(--border);
+    }
+
+    .philosophy-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 96px;
+      align-items: start;
+    }
+
+    .philosophy-left {
+      position: sticky;
+      top: 96px;
+    }
+
+    .philosophy-overline {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    .philosophy-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 34px;
+      color: var(--ink);
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+    }
+
+    .philosophy-quote-mark {
+      display: block;
+      font-family: var(--font-display);
+      font-style: normal;
+      font-size: 88px;
+      color: var(--burgundy);
+      opacity: 0.25;
+      line-height: 0.65;
+      margin-bottom: 18px;
+    }
+
+    .philosophy-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .phil-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 30px 26px;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .phil-card:hover {
+      border-color: var(--burgundy-pale);
+      box-shadow: 0 4px 24px rgba(107,26,40,0.06);
+    }
+
+    .phil-icon {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 18px;
+      color: var(--burgundy);
+      opacity: 0.7;
+    }
+
+    .phil-title {
+      font-family: var(--font-bold);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .phil-desc {
+      font-family: var(--font-body);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       SKILLS MARQUEE
+    ============================================================ */
+    #skills {
+      background: var(--white);
+      padding: 72px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+
+    #skills::before,
+    #skills::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #skills::before {
+      left: 0;
+      background: linear-gradient(to right, var(--white) 0%, transparent 100%);
+    }
+
+    #skills::after {
+      right: 0;
+      background: linear-gradient(to left, var(--white) 0%, transparent 100%);
+    }
+
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marqueeScroll 30s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    .marquee-content {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .skill-item {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 22px;
+      color: var(--muted);
+      padding: 0 30px;
+      white-space: nowrap;
+    }
+
+    .skill-sep {
+      font-size: 8px;
+      color: var(--burgundy);
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       CONTACT
+    ============================================================ */
+    #contact {
+      background: var(--white);
+      padding: 148px 40px 128px;
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .contact-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .contact-heading {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 80px;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      margin-bottom: 32px;
+    }
+
+    .contact-heading em {
+      font-style: italic;
+      color: var(--burgundy);
+    }
+
+    .contact-body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 52px;
+    }
+
+    .contact-cta-wrap {
+      margin-bottom: 44px;
+    }
+
+    .contact-details {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .contact-detail {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      padding: 0 20px;
+    }
+
+    .contact-detail + .contact-detail {
+      border-left: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--cream);
+      border-top: 1px solid var(--border);
+      padding: 28px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .footer-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       MOBILE RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+
+      /* Nav */
+      #nav {
+        padding: 0 24px;
+      }
+      .nav-links {
+        display: none;
+      }
+
+      /* Hero */
+      #hero {
+        flex-direction: column;
+        min-height: auto;
+      }
+      .hero-left {
+        width: 100%;
+        padding: 56px 28px 40px;
+      }
+      .hero-name-shae {
+        font-size: 64px;
+      }
+      .hero-name-creates {
+        font-size: 58px;
+      }
+      .hero-right {
+        width: 100%;
+        min-height: 280px;
+      }
+      .hero-svg-wrap {
+        width: 60%;
+      }
+
+      /* Stats */
+      #stats {
+        padding: 48px 28px;
+      }
+      .stats-grid {
+        flex-direction: column;
+        gap: 40px;
+      }
+      .stat-item + .stat-item::before {
+        display: none;
+      }
+
+      /* Work */
+      #work {
+        padding: 80px 28px;
+      }
+      .section-heading {
+        font-size: 48px;
+        margin-bottom: 48px;
+      }
+      .project-card,
+      .project-card.reverse {
+        flex-direction: column;
+        min-height: auto;
+      }
+      .project-visual {
+        width: 100%;
+        min-height: 240px;
+      }
+      .project-content {
+        padding: 36px 28px;
+      }
+      .project-name {
+        font-size: 34px;
+      }
+
+      /* Philosophy */
+      #philosophy {
+        padding: 80px 28px;
+      }
+      .philosophy-inner {
+        grid-template-columns: 1fr;
+        gap: 56px;
+      }
+      .philosophy-left {
+        position: static;
+      }
+      .philosophy-quote {
+        font-size: 26px;
+      }
+      .philosophy-cards {
+        grid-template-columns: 1fr;
+      }
+
+      /* Contact */
+      #contact {
+        padding: 96px 28px 80px;
+      }
+      .contact-heading {
+        font-size: 52px;
+      }
+      .contact-details {
+        flex-direction: column;
+        gap: 14px;
+      }
+      .contact-detail {
+        border-left: none !important;
+        padding: 0;
+      }
+
+      /* Footer */
+      footer {
+        padding: 24px 28px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       CUSTOM CURSOR
+  ============================================================ -->
+  <div class="cursor-dot"  id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">S.</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section id="hero">
+
+    <!-- Left: Text -->
+    <div class="hero-left">
+      <p class="hero-eyebrow">Web Artist / Digital Designer</p>
+
+      <div class="hero-name">
+        <span class="hero-name-shae">Shae</span>
+        <span class="hero-name-creates">CREATES.</span>
+      </div>
+
+      <p class="hero-tagline">
+        Crafting immersive digital worlds where design and&nbsp;emotion meet at the pixel's edge.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#work"    class="btn-primary"><span>View Work</span></a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+
+    <!-- Right: Decorative SVG panel -->
+    <div class="hero-right">
+      <div class="hero-svg-wrap">
+        <svg viewBox="0 0 520 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Concentric circles -->
+          <circle cx="260" cy="310" r="220" fill="none" stroke="#6b1a28" stroke-width="0.8" opacity="0.18"/>
+          <circle cx="260" cy="310" r="185" fill="none" stroke="#6b1a28" stroke-width="0.5" opacity="0.13"/>
+          <circle cx="260" cy="310" r="148" fill="none" stroke="#6b1a28" stroke-width="0.5" opacity="0.12"/>
+          <circle cx="260" cy="310" r="112" fill="none" stroke="#6b1a28" stroke-width="0.5" opacity="0.12"/>
+          <circle cx="260" cy="310" r="74"  fill="none" stroke="#6b1a28" stroke-width="0.8" opacity="0.16"/>
+          <circle cx="260" cy="310" r="36"  fill="none" stroke="#6b1a28" stroke-width="1"   opacity="0.22"/>
+          <circle cx="260" cy="310" r="10"  fill="#6b1a28" opacity="0.18"/>
+
+          <!-- Cardinal crosshair -->
+          <line x1="260" y1="40"  x2="260" y2="580" stroke="#6b1a28" stroke-width="0.5" opacity="0.1"/>
+          <line x1="0"   y1="310" x2="520" y2="310" stroke="#6b1a28" stroke-width="0.5" opacity="0.1"/>
+
+          <!-- Diagonal rules -->
+          <line x1="60"  y1="110" x2="460" y2="510" stroke="#6b1a28" stroke-width="0.4" opacity="0.07"/>
+          <line x1="460" y1="110" x2="60"  y2="510" stroke="#6b1a28" stroke-width="0.4" opacity="0.07"/>
+
+          <!-- Cardinal tick marks -->
+          <line x1="260" y1="82"  x2="260" y2="106" stroke="#6b1a28" stroke-width="1.5" opacity="0.3"/>
+          <line x1="260" y1="514" x2="260" y2="538" stroke="#6b1a28" stroke-width="1.5" opacity="0.3"/>
+          <line x1="36"  y1="310" x2="60"  y2="310" stroke="#6b1a28" stroke-width="1.5" opacity="0.3"/>
+          <line x1="460" y1="310" x2="484" y2="310" stroke="#6b1a28" stroke-width="1.5" opacity="0.3"/>
+
+          <!-- Cardinal dot accents -->
+          <circle cx="260" cy="80"  r="4" fill="#6b1a28" opacity="0.3"/>
+          <circle cx="260" cy="540" r="4" fill="#6b1a28" opacity="0.3"/>
+          <circle cx="34"  cy="310" r="4" fill="#6b1a28" opacity="0.3"/>
+          <circle cx="486" cy="310" r="4" fill="#6b1a28" opacity="0.3"/>
+
+          <!-- Upper + lower decorative arcs -->
+          <path d="M 110 310 A 150 150 0 0 1 410 310" fill="none" stroke="#6b1a28" stroke-width="1" opacity="0.13"/>
+          <path d="M 80  310 A 180 180 0 0 0 440 310" fill="none" stroke="#6b1a28" stroke-width="0.6" opacity="0.1"/>
+          <path d="M 110 310 A 150 150 0 0 0 410 310" fill="none" stroke="#6b1a28" stroke-width="0.6" opacity="0.09"/>
+
+          <!-- Fine grid overlay -->
+          <line x1="155" y1="80"  x2="155" y2="540" stroke="#6b1a28" stroke-width="0.3" opacity="0.06"/>
+          <line x1="365" y1="80"  x2="365" y2="540" stroke="#6b1a28" stroke-width="0.3" opacity="0.06"/>
+          <line x1="50"  y1="205" x2="470" y2="205" stroke="#6b1a28" stroke-width="0.3" opacity="0.06"/>
+          <line x1="50"  y1="415" x2="470" y2="415" stroke="#6b1a28" stroke-width="0.3" opacity="0.06"/>
+
+          <!-- Corner accent brackets -->
+          <path d="M 80 120 L 80 90 L 110 90"  fill="none" stroke="#6b1a28" stroke-width="1" opacity="0.22"/>
+          <path d="M 440 120 L 440 90 L 410 90" fill="none" stroke="#6b1a28" stroke-width="1" opacity="0.22"/>
+          <path d="M 80 500 L 80 530 L 110 530" fill="none" stroke="#6b1a28" stroke-width="1" opacity="0.22"/>
+          <path d="M 440 500 L 440 530 L 410 530" fill="none" stroke="#6b1a28" stroke-width="1" opacity="0.22"/>
+
+          <!-- Outer ring dashes (simulated with short arcs) -->
+          <circle cx="260" cy="310" r="248" fill="none" stroke="#6b1a28" stroke-width="0.5"
+                  stroke-dasharray="6 14" opacity="0.12"/>
+        </svg>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       STATS BAR
+  ============================================================ -->
+  <section id="stats">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <span class="stat-number" data-target="3"   data-suffix="+">0+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:0.1s">
+        <span class="stat-number" data-target="20"  data-suffix="+">0+</span>
+        <span class="stat-label">Projects Delivered</span>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:0.2s">
+        <span class="stat-number" data-target="6"   data-suffix="">0</span>
+        <span class="stat-label">Design Disciplines</span>
+      </div>
+      <div class="stat-item reveal" style="transition-delay:0.3s">
+        <span class="stat-number" data-target="100" data-suffix="%">0%</span>
+        <span class="stat-label">Remote Ready</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       WORK / PROJECTS
+  ============================================================ -->
+  <section id="work">
+    <div class="reveal">
+      <p class="section-eyebrow">Portfolio</p>
+      <h2 class="section-heading">Selected Work</h2>
+    </div>
+
+    <div class="projects">
+
+      <!-- ── Project 01: Velvet Nocturne (image-left / text-right) ── -->
+      <article class="project-card reveal">
+
+        <div class="project-visual" style="background: #f2ebe0;">
+          <!-- Gold: overlapping circles + ruled lines -->
+          <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Horizontal ruled lines -->
+            <line x1="10" y1="50"  x2="370" y2="50"  stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="80"  x2="370" y2="80"  stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="110" x2="370" y2="110" stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="140" x2="370" y2="140" stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="170" x2="370" y2="170" stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="200" x2="370" y2="200" stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="230" x2="370" y2="230" stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <line x1="10" y1="260" x2="370" y2="260" stroke="#b8936a" stroke-width="0.6" opacity="0.4"/>
+            <!-- Overlapping circles -->
+            <circle cx="150" cy="150" r="110" fill="none" stroke="#b8936a" stroke-width="1.5" opacity="0.65"/>
+            <circle cx="230" cy="150" r="110" fill="none" stroke="#b8936a" stroke-width="1.5" opacity="0.65"/>
+            <circle cx="190" cy="100" r="85"  fill="none" stroke="#b8936a" stroke-width="0.8" opacity="0.4"/>
+            <!-- Diamond -->
+            <path d="M 190 92 L 246 150 L 190 208 L 134 150 Z"
+                  fill="rgba(184,147,106,0.08)" stroke="#b8936a" stroke-width="1.2" opacity="0.6"/>
+            <!-- Central dot -->
+            <circle cx="190" cy="150" r="6" fill="#b8936a" opacity="0.55"/>
+            <circle cx="190" cy="150" r="2" fill="#b8936a" opacity="0.9"/>
+          </svg>
+        </div>
+
+        <div class="project-content">
+          <p class="project-number">01 / 03</p>
+          <h3 class="project-name">Velvet Nocturne</h3>
+          <p class="project-desc">
+            Evocative brand world for an independent fragrance house —
+            an immersive digital scent journey where atmosphere is the interface.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Art Direction</span>
+            <span class="tag">Interaction Design</span>
+            <span class="tag">SVG Animation</span>
+          </div>
+          <a href="#" class="project-link">View Project</a>
+        </div>
+
+      </article>
+
+      <!-- ── Project 02: Terrain (text-left / image-right) ── -->
+      <article class="project-card reverse reveal" style="transition-delay:0.1s">
+
+        <div class="project-visual" style="background: #f0e8eb;">
+          <!-- Burgundy: grid + diagonal hatching + central rect -->
+          <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Vertical grid -->
+            <line x1="60"  y1="15" x2="60"  y2="285" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="120" y1="15" x2="120" y2="285" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="190" y1="15" x2="190" y2="285" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="260" y1="15" x2="260" y2="285" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="320" y1="15" x2="320" y2="285" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <!-- Horizontal grid -->
+            <line x1="15" y1="60"  x2="365" y2="60"  stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="15" y1="120" x2="365" y2="120" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="15" y1="150" x2="365" y2="150" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="15" y1="180" x2="365" y2="180" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <line x1="15" y1="240" x2="365" y2="240" stroke="#6b1a28" stroke-width="0.6" opacity="0.28"/>
+            <!-- Diagonal hatching -->
+            <line x1="15"  y1="15"  x2="365" y2="285" stroke="#6b1a28" stroke-width="1.2" opacity="0.45"/>
+            <line x1="85"  y1="15"  x2="365" y2="235" stroke="#6b1a28" stroke-width="0.6" opacity="0.25"/>
+            <line x1="15"  y1="85"  x2="295" y2="285" stroke="#6b1a28" stroke-width="0.6" opacity="0.25"/>
+            <line x1="365" y1="15"  x2="15"  y2="285" stroke="#6b1a28" stroke-width="0.7" opacity="0.3"/>
+            <!-- Central rectangle -->
+            <rect x="120" y="96"  width="140" height="108" fill="rgba(107,26,40,0.07)" stroke="#6b1a28" stroke-width="1.6" opacity="0.65"/>
+            <rect x="148" y="118" width="84"  height="64"  fill="rgba(107,26,40,0.1)"  stroke="#6b1a28" stroke-width="0.8" opacity="0.4"/>
+            <!-- Crosshair through rect -->
+            <line x1="190" y1="70"  x2="190" y2="230" stroke="#6b1a28" stroke-width="1" opacity="0.35"/>
+            <line x1="90"  y1="150" x2="290" y2="150" stroke="#6b1a28" stroke-width="1" opacity="0.35"/>
+            <!-- Corner dots -->
+            <circle cx="120" cy="96"  r="3" fill="#6b1a28" opacity="0.5"/>
+            <circle cx="260" cy="96"  r="3" fill="#6b1a28" opacity="0.5"/>
+            <circle cx="120" cy="204" r="3" fill="#6b1a28" opacity="0.5"/>
+            <circle cx="260" cy="204" r="3" fill="#6b1a28" opacity="0.5"/>
+          </svg>
+        </div>
+
+        <div class="project-content">
+          <p class="project-number">02 / 03</p>
+          <h3 class="project-name">Terrain</h3>
+          <p class="project-desc">
+            Immersive editorial experience for a landscape architecture studio —
+            where spatial thinking meets scrolled narrative across every viewport.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Motion Design</span>
+            <span class="tag">Editorial Layout</span>
+            <span class="tag">Typography</span>
+          </div>
+          <a href="#" class="project-link">View Project</a>
+        </div>
+
+      </article>
+
+      <!-- ── Project 03: Luminary (image-left / text-right) ── -->
+      <article class="project-card reveal" style="transition-delay:0.15s">
+
+        <div class="project-visual" style="background: #f8f6f3;">
+          <!-- Ink: spiral arcs + dot matrix -->
+          <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Dot matrix 7×5 -->
+            <g opacity="0.2" fill="#1a1410">
+              <!-- Row 1 -->
+              <circle cx="50"  cy="50"  r="2.5"/><circle cx="100" cy="50"  r="2.5"/>
+              <circle cx="150" cy="50"  r="2.5"/><circle cx="190" cy="50"  r="2.5"/>
+              <circle cx="230" cy="50"  r="2.5"/><circle cx="280" cy="50"  r="2.5"/>
+              <circle cx="330" cy="50"  r="2.5"/>
+              <!-- Row 2 -->
+              <circle cx="50"  cy="100" r="2.5"/><circle cx="100" cy="100" r="2.5"/>
+              <circle cx="150" cy="100" r="2.5"/><circle cx="190" cy="100" r="2.5"/>
+              <circle cx="230" cy="100" r="2.5"/><circle cx="280" cy="100" r="2.5"/>
+              <circle cx="330" cy="100" r="2.5"/>
+              <!-- Row 3 -->
+              <circle cx="50"  cy="150" r="2.5"/><circle cx="100" cy="150" r="2.5"/>
+              <circle cx="150" cy="150" r="2.5"/><circle cx="190" cy="150" r="2.5"/>
+              <circle cx="230" cy="150" r="2.5"/><circle cx="280" cy="150" r="2.5"/>
+              <circle cx="330" cy="150" r="2.5"/>
+              <!-- Row 4 -->
+              <circle cx="50"  cy="200" r="2.5"/><circle cx="100" cy="200" r="2.5"/>
+              <circle cx="150" cy="200" r="2.5"/><circle cx="190" cy="200" r="2.5"/>
+              <circle cx="230" cy="200" r="2.5"/><circle cx="280" cy="200" r="2.5"/>
+              <circle cx="330" cy="200" r="2.5"/>
+              <!-- Row 5 -->
+              <circle cx="50"  cy="250" r="2.5"/><circle cx="100" cy="250" r="2.5"/>
+              <circle cx="150" cy="250" r="2.5"/><circle cx="190" cy="250" r="2.5"/>
+              <circle cx="230" cy="250" r="2.5"/><circle cx="280" cy="250" r="2.5"/>
+              <circle cx="330" cy="250" r="2.5"/>
+            </g>
+            <!-- Spiral arcs (open arcs at increasing radii) -->
+            <path d="M 210 150 A 20 20 0 1 0 170 150"
+                  fill="none" stroke="#1a1410" stroke-width="1.6" opacity="0.5" stroke-linecap="round"/>
+            <path d="M 230 150 A 40 40 0 1 0 150 150"
+                  fill="none" stroke="#1a1410" stroke-width="1.2" opacity="0.38" stroke-linecap="round"/>
+            <path d="M 255 150 A 65 65 0 1 0 125 150"
+                  fill="none" stroke="#1a1410" stroke-width="0.9" opacity="0.28" stroke-linecap="round"/>
+            <path d="M 280 150 A 90 90 0 1 0 100 150"
+                  fill="none" stroke="#1a1410" stroke-width="0.6" opacity="0.18" stroke-linecap="round"/>
+            <!-- Centre -->
+            <circle cx="190" cy="150" r="8"  fill="none" stroke="#1a1410" stroke-width="1.5" opacity="0.5"/>
+            <circle cx="190" cy="150" r="3"  fill="#1a1410" opacity="0.35"/>
+          </svg>
+        </div>
+
+        <div class="project-content">
+          <p class="project-number">03 / 03</p>
+          <h3 class="project-name">Luminary</h3>
+          <p class="project-desc">
+            Event microsite for a theatre and arts collective —
+            a stage-lit digital identity that performs as much as it informs.
+          </p>
+          <div class="project-tags">
+            <span class="tag">Web Design</span>
+            <span class="tag">Brand Identity</span>
+            <span class="tag">Illustration</span>
+          </div>
+          <a href="#" class="project-link">View Project</a>
+        </div>
+
+      </article>
+
+    </div><!-- /.projects -->
+  </section>
+
+  <!-- ============================================================
+       DESIGN PHILOSOPHY
+  ============================================================ -->
+  <section id="philosophy">
+    <div class="philosophy-inner">
+
+      <!-- Left: pull quote -->
+      <div class="philosophy-left reveal">
+        <span class="philosophy-overline">Design Philosophy</span>
+        <blockquote class="philosophy-quote">
+          <span class="philosophy-quote-mark">&ldquo;</span>
+          I treat the browser as a canvas&thinsp;—&thinsp;designing
+          atmosphere before I design anything else.
+        </blockquote>
+      </div>
+
+      <!-- Right: 2×2 cards -->
+      <div class="philosophy-cards">
+        <div class="phil-card reveal">
+          <span class="phil-icon">◎</span>
+          <h4 class="phil-title">Atmosphere</h4>
+          <p class="phil-desc">Every project begins with feeling. Colour, space, and deliberate silence shape the mood before a single element lands on the page.</p>
+        </div>
+        <div class="phil-card reveal" style="transition-delay:0.1s">
+          <span class="phil-icon">⟳</span>
+          <h4 class="phil-title">Motion</h4>
+          <p class="phil-desc">Animation is not decoration — it is the rhythm of the interface, guiding attention with intention and grace.</p>
+        </div>
+        <div class="phil-card reveal" style="transition-delay:0.15s">
+          <span class="phil-icon">↳</span>
+          <h4 class="phil-title">Narrative</h4>
+          <p class="phil-desc">Good design tells a story in sequence. Every scroll is a sentence; every section a chapter unfolding in time.</p>
+        </div>
+        <div class="phil-card reveal" style="transition-delay:0.2s">
+          <span class="phil-icon">◈</span>
+          <h4 class="phil-title">Craft</h4>
+          <p class="phil-desc">Details are the difference. Kerning, shadow depth, transition timing — these invisible choices define the whole.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SKILLS MARQUEE
+  ============================================================ -->
+  <section id="skills" aria-label="Skills">
+    <div class="marquee-track" id="marqueeTrack">
+
+      <!-- First copy -->
+      <div class="marquee-content" aria-hidden="false">
+        <span class="skill-item">Figma</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Interaction Design</span><span class="skill-sep">◆</span>
+        <span class="skill-item">SVG Animation</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Art Direction</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Motion Design</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Canva</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Editorial Layout</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Brand Identity</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Web Typography</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Digital Illustration</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Wireframing</span><span class="skill-sep">◆</span>
+      </div>
+
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-content" aria-hidden="true">
+        <span class="skill-item">Figma</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Interaction Design</span><span class="skill-sep">◆</span>
+        <span class="skill-item">SVG Animation</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Art Direction</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Motion Design</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Canva</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Editorial Layout</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Brand Identity</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Web Typography</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Digital Illustration</span><span class="skill-sep">◆</span>
+        <span class="skill-item">Wireframing</span><span class="skill-sep">◆</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT
+  ============================================================ -->
+  <section id="contact">
+    <div class="contact-inner reveal">
+      <p class="contact-eyebrow">Let&rsquo;s Collaborate</p>
+      <h2 class="contact-heading">
+        Start something <em>wondrous.</em>
+      </h2>
+      <p class="contact-body">
+        I&rsquo;m open to freelance projects and full-time opportunities.
+        If you&rsquo;re building something extraordinary, I&rsquo;d love to be
+        part of the conversation — from first concept to final pixel.
+      </p>
+      <div class="contact-cta-wrap">
+        <a href="mailto:hello@shaecreates.com" class="btn-primary">
+          <span>Say Hello</span>
+        </a>
+      </div>
+      <div class="contact-details">
+        <span class="contact-detail">hello@shaecreates.com</span>
+        <span class="contact-detail">London, UK</span>
+        <span class="contact-detail">Available Now</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <span class="footer-copy">&copy; 2025 Shae</span>
+    <span class="footer-quote">&ldquo;Every pixel with purpose.&rdquo;</span>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    /* ── Custom Cursor ── */
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+
+    let mouseX = -100, mouseY = -100;
+    let ringX  = -100, ringY  = -100;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top  = mouseY + 'px';
+    });
+
+    /* Smooth ring lag */
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.11;
+      ringY += (mouseY - ringY) * 0.11;
+      ring.style.left = ringX + 'px';
+      ring.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    /* Expand on interactive elements */
+    document.querySelectorAll('a, button, .project-card, .phil-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        dot.classList.add('is-hovering');
+        ring.classList.add('is-hovering');
+      });
+      el.addEventListener('mouseleave', () => {
+        dot.classList.remove('is-hovering');
+        ring.classList.remove('is-hovering');
+      });
+    });
+
+    /* Hide cursor when it leaves window */
+    document.addEventListener('mouseleave', () => {
+      dot.style.opacity  = '0';
+      ring.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', () => {
+      dot.style.opacity  = '1';
+      ring.style.opacity = '0.45';
+    });
+
+
+    /* ── Scroll Reveal (IntersectionObserver) ── */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+
+    /* ── Stats Count-Up ── */
+    let statsHaveFired = false;
+
+    function animateCounter(el) {
+      const target   = parseInt(el.dataset.target, 10);
+      const suffix   = el.dataset.suffix || '';
+      const duration = 1600;
+      const startTime = performance.now();
+
+      function tick(now) {
+        const elapsed  = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        /* ease-out cubic */
+        const eased    = 1 - Math.pow(1 - progress, 3);
+        const current  = Math.floor(eased * target);
+        el.textContent = current + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.textContent = target + suffix;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !statsHaveFired) {
+          statsHaveFired = true;
+          document.querySelectorAll('.stat-number').forEach(el => animateCounter(el));
+        }
+      });
+    }, { threshold: 0.4 });
+
+    const statsSection = document.getElementById('stats');
+    if (statsSection) statsObserver.observe(statsSection);
+
+
+    /* ── Smooth Nav Link Active State ── */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === '#' + id
+              ? 'var(--burgundy)'
+              : '';
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(s => navObserver.observe(s));
+  </script>
+
+</body>
+</html>
